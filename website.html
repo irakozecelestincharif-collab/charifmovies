@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charif Movies - Free Classic Movies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-bar input::placeholder {
+            color: #ccc;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffd700;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #ffd700;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .movie-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #333, #666);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .movie-info {
+            padding: 20px;
+        }
+
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .movie-year {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .movie-description {
+            color: #ddd;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-watch {
+            background: #ffd700;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .btn-download {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .info-section h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #ccc;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .filters {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Charif Movies</h1>
+            <p class="subtitle">Discover & Download Classic Movies - Completely Free & Legal</p>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search classic movies...">
+                <span class="search-icon">🔍</span>
+            </div>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" data-genre="all">All Movies</button>
+            <button class="filter-btn" data-genre="drama">Drama</button>
+            <button class="filter-btn" data-genre="horror">Horror</button>
+            <button class="filter-btn" data-genre="sci-fi">Sci-Fi</button>
+            <button class="filter-btn" data-genre="comedy">Comedy</button>
+            <button class="filter-btn" data-genre="western">Western</button>
+        </div>
+
+        <div class="movies-grid" id="moviesGrid">
+            <!-- Movies will be populated by JavaScript -->
+        </div>
+
+        <div class="info-section">
+            <h2>About Public Domain Movies</h2>
+            <p>Public domain films are movies whose copyrights have expired or were never copyrighted in the first place. This means they can be legally watched, downloaded, and distributed for free. Many classic films from the early days of cinema have entered the public domain, offering a treasure trove of cinematic history.</p>
+            <br>
+            <p><strong>Legal Notice:</strong> All movies featured on this site are confirmed to be in the public domain in the United States. However, copyright laws may vary by country. Always verify the legal status in your jurisdiction before downloading.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Charif Movies. Preserving classic cinema for future generations.</p>
+        <p>All movies are legally free and in the public domain.</p>
+    </footer>
+
+    <script>
+        // Sample public domain movies data
+        const movies = [
+            {
+                title: "Night of the Living Dead",
+                year: 1968,
+                genre: "horror",
+                description: "A group of people hide in a farmhouse as flesh-eating zombies ravage the countryside. George A. Romero's groundbreaking horror classic.",
+                icon: "🧟"
+            },
+            {
+                title: "Plan 9 from Outer Space",
+                year: 1959,
+                genre: "sci-fi",
+                description: "Aliens resurrect the dead to stop humanity from creating a doomsday weapon. Often called 'the worst movie ever made' but beloved by cult film fans.",
+                icon: "🛸"
+            },
+            {
+                title: "The Cabinet of Dr. Caligari",
+                year: 1920,
+                genre: "horror",
+                description: "A classic German expressionist film about a hypnotist who uses a somnambulist to commit murders. A masterpiece of silent cinema.",
+                icon: "🎭"
+            },
+            {
+                title: "Metropolis",
+                year: 1927,
+                genre: "sci-fi",
+                description: "Fritz Lang's visionary silent epic about a futuristic city divided between workers and elites. A landmark of science fiction cinema.",
+                icon: "🏙️"
+            },
+            {
+                title: "Nosferatu",
+                year: 1922,
+                genre: "horror",
+                description: "F.W. Murnau's unauthorized adaptation of Dracula. Max Schreck's portrayal of Count Orlok remains one of cinema's most terrifying vampires.",
+                icon: "🧛"
+            },
+            {
+                title: "The Great Train Robbery",
+                year: 1903,
+                genre: "western",
+                description: "Edwin S. Porter's pioneering Western film. One of the first movies to tell a complete story and a milestone in cinema history.",
+                icon: "🚂"
+            },
+            {
+                title: "Reefer Madness",
+                year: 1936,
+                genre: "drama",
+                description: "An anti-marijuana propaganda film that became a cult classic. Now viewed as unintentionally comedic.",
+                icon: "🌿"
+            },
+            {
+                title: "The Phantom of the Opera",
+                year: 1925,
+                genre: "drama",
+                description: "Lon Chaney's iconic performance as the disfigured Phantom in this silent horror classic set in the Paris Opera House.",
+                icon: "👻"
+            },
+            {
+                title: "Little Shop of Horrors",
+                year: 1960,
+                genre: "comedy",
+                description: "Roger Corman's black comedy about a man-eating plant. Shot in just two days, it later inspired a famous musical and remake.",
+                icon: "🌱"
+            },
+            {
+                title: "The Last Man on Earth",
+                year: 1964,
+                genre: "sci-fi",
+                description: "Vincent Price stars in this adaptation of Richard Matheson's novel about a plague that turns people into vampires.",
+                icon: "🌍"
+            },
+            {
+                title: "Carnival of Souls",
+                year: 1962,
+                genre: "horror",
+                description: "A low-budget psychological horror film about a woman haunted by mysterious figures after a car accident. A cult classic.",
+                icon: "🎠"
+            },
+            {
+                title: "The Battleship Potemkin",
+                year: 1925,
+                genre: "drama",
+                description: "Sergei Eisenstein's revolutionary Soviet film about a mutiny on a Russian battleship. Famous for the Odessa Steps sequence.",
+                icon: "⚓"
+            }
+        ];
+
+        let filteredMovies = movies;
+
+        function renderMovies(moviesToRender) {
+            const moviesGrid = document.getElementById('moviesGrid');
+            moviesGrid.innerHTML = '';
+
+            moviesToRender.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+                
+                movieCard.innerHTML = `
+                    <div class="movie-poster">
+                        <span style="font-size: 72px;">${movie.icon}</span>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-year">${movie.year} • ${movie.genre.toUpperCase()}</div>
+                        <div class="movie-description">${movie.description}</div>
+                        <div class="movie-actions">
+                            <button class="btn btn-watch" onclick="watchMovie('${movie.title}')">▶ Watch</button>
+                            <button class="btn btn-download" onclick="downloadMovie('${movie.title}')">⬇ Download</button>
+                        </div>
+                    </div>
+                `;
+                
+                moviesGrid.appendChild(movieCard);
+            });
+        }
+
+        function filterMovies(genre) {
+            if (genre === 'all') {
+                filteredMovies = movies;
+            } else {
+                filteredMovies = movies.filter(movie => movie.genre === genre);
+            }
+            renderMovies(filteredMovies);
+        }
+
+        function searchMovies(query) {
+            const searchResults = filteredMovies.filter(movie => 
+                movie.title.toLowerCase().includes(query.toLowerCase()) ||
+                movie.description.toLowerCase().includes(query.toLowerCase())
+            );
+            renderMovies(searchResults);
+        }
+
+        function watchMovie(title) {
+            alert(`🎬 Opening "${title}" for streaming...\n\nNote: In a real implementation, this would link to Archive.org or another public domain movie repository.`);
+        }
+
+        function downloadMovie(title) {
+            alert(`⬇️ Starting download of "${title}"...\n\nNote: In a real implementation, this would provide download links to high-quality versions from Archive.org or similar repositories.`);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMovies(movies);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchMovies(e.target.value);
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterMovies(this.dataset.genre);
+            });
+        });
+    </script>
+</body>
+</html>Add"Charif Movies website"
